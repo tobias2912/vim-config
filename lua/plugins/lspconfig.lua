@@ -50,6 +50,7 @@ local on_attach = function(client, bufnr)
 	-- See https://github.com/ray-x/lsp_signature.nvim
 	-- require('lsp_signature').on_attach({
 	-- 	bind = true,
+	-- 	check_pumvisible = true,
 	-- 	hint_enable = false,
 	-- 	hint_prefix = ' ',  --  
 	-- 	handler_opts = { border = 'rounded' },
@@ -81,13 +82,13 @@ end
 
 -- Diagnostics signs and highlights
 --   Error:   ✘
---   Warning:  ⚠ 
+--   Warn:  ⚠ 
 --   Hint:  
---   Information:   ⁱ
-local signs = { Error = '✘', Warning = '', Hint = '', Information = 'ⁱ'}
+--   Info:   ⁱ
+local signs = { Error = '✘', Warn = '', Hint = '', Info = 'ⁱ'}
 for type, icon in pairs(signs) do
-	local hl = 'LspDiagnosticsSign' .. type
-	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+	local hl = 'DiagnosticSign' .. type
+	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = '' })
 end
 
 -- Setup CompletionItemKind symbols, see lua/lsp_kind.lua
@@ -96,17 +97,23 @@ end
 -- Configure diagnostics publish settings
 vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
 	vim.lsp.diagnostic.on_publish_diagnostics, {
-		update_in_insert = false,
+		signs = true,
 		underline = false,
+		update_in_insert = false,
 		virtual_text = {
 			spacing = 4,
-			-- prefix = '',
-		},
-		signs = true,
-		-- signs = function(bufnr, _)
-		-- 	return vim.bo[bufnr].buftype == ''
-		-- end,
+			-- prefix = '',
+		}
 	}
+)
+
+-- Configure hover (normal K) handle
+vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
+	vim.lsp.handlers.hover, { border = 'rounded' }
+)
+
+vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
+	vim.lsp.handlers.signature_help, { border = 'rounded' }
 )
 
 -- Open references in quickfix window and jump to first item.
@@ -127,14 +134,6 @@ vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
 -- 	end
 -- end
 
--- Configure hover (normal K) handle
-vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
-	vim.lsp.handlers.hover, {
-		-- Use a sharp border with `FloatBorder` highlights
-		border = 'rounded'
-	}
-)
-
 -- Combine base config for each server and merge user-defined settings.
 local function make_config(server_name)
 	-- Setup base config for each server.
@@ -142,14 +141,26 @@ local function make_config(server_name)
 	c.on_attach = on_attach
 	c.capabilities = vim.lsp.protocol.make_client_capabilities()
 	c.capabilities = require('cmp_nvim_lsp').update_capabilities(c.capabilities)
-	-- c.capabilities.textDocument.completion.completionItem.snippetSupport = true
-	-- c.capabilities.textDocument.completion.completionItem.resolveSupport = {
-	-- 	properties = {
-	-- 		'documentation',
-	-- 		'detail',
-	-- 		'additionalTextEdits',
-	-- 	}
-	-- }
+	c.flags = {
+		debounce_text_changes = 150,
+	}
+
+	-- cmp_nvim_lsp enables following options:
+	--   completionItem = {
+	--     commitCharactersSupport = true,
+	--     deprecatedSupport = true,
+	--     documentationFormat = { "markdown", "plaintext" },
+	--     insertReplaceSupport = true,
+	--     labelDetailsSupport = true,
+	--     preselectSupport = true,
+	--     resolveSupport = {
+	--       properties = { "documentation", "detail", "additionalTextEdits" }
+	--     },
+	--     snippetSupport = true,
+	--     tagSupport = {
+	--       valueSet = { 1 }
+	--     }
+	--   }
 
 	-- Merge user-defined lsp settings.
 	-- These can be overridden locally by lua/lsp-local/<server_name>.lua
@@ -184,16 +195,13 @@ end
 -- main
 
 if vim.fn.has('vim_starting') then
-	-- Setup LSP with lspinstall
-	setup_servers()
+	local lsp_installer = require('nvim-lsp-installer')
 
-	-- Automatically reload after `:LspInstall <server>`
-	require'lspinstall'.post_install_hook = function()
-		setup_servers()  -- reload installed servers
-		if not vim.bo.modified and vim.bo.buftype == '' then
-			vim.cmd('bufdo e')  -- starts server by triggering the FileType autocmd
-		end
-	end
+	lsp_installer.on_server_ready(function(server)
+		local opts = make_config(server.name)
+		server:setup(opts)
+		vim.cmd [[ do User LspAttachBuffers ]]
+	end)
 
 	-- global custom location-list diagnostics window toggle.
 	local args = { noremap = true, silent = true }
@@ -209,7 +217,7 @@ if vim.fn.has('vim_starting') then
 			autocmd!
 
 			" See https://github.com/kosayoda/nvim-lightbulb
-			" autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
+			autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
 			" Automatic diagnostic hover
 			" autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics({ focusable=false })
 		augroup END
