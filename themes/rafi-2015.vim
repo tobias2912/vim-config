@@ -157,12 +157,6 @@ let g:gitgutter_sign_removed_first_line = '▔'
 let g:gitgutter_sign_modified_removed = '▋'
 "}}}
 
-" Plugin: Indent-Guides icons {{{
-" ---------------------------------------------------------
-let g:indent_guides_guide_size = 1
-let g:indent_guides_start_level = 1
-let g:indent_guides_auto_colors = 0
-"}}}
 
 " Plugin: vim-gitgutter {{{
 " ---------------------------------------------------------

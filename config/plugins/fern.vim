@@ -32,9 +32,9 @@ let s:original_width = g:fern#drawer_width
 nnoremap <Plug>(fern-close-drawer) :<C-u>FernDo close -drawer -stay<CR>
 
 function! s:init_fern()
-	if has('nvim')
-		setlocal winhighlight=CursorLine:UserSelectionBackground
-	end
+	" if has('nvim')
+		" setlocal winhighlight=CursorLine:UserSelectionBackground
+	" end
 
 	silent! nnoremap <buffer> f <Nop>
 	silent! nnoremap <buffer> F <Nop>
