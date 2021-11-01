@@ -7,7 +7,6 @@
 if get(g:, 'disable_mappings')
 	finish
 endif
-
 " Elite-mode {{{
 " ----------
 if get(g:, 'elite_mode')
@@ -25,8 +24,9 @@ endif
 " ----------
 
 " Double leader key for toggling visual-line mode
-nmap <Leader><Leader> V
-xmap <Leader><Leader> <Esc>
+" nmap <Leader><Leader> V
+" xmap <Leader><Leader> <Esc>
+nmap <leader><leader> <c-^>
 
 " Toggle fold
 nnoremap <CR> za

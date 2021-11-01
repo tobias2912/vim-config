@@ -4,8 +4,8 @@
 
 require('which-key').load()
 require('which-key').setup({
-	-- triggers = 'auto', -- automatically setup triggers
-	triggers = { '<localleader>d' },
+	triggers = 'auto', -- automatically setup triggers
+	-- triggers = { '<localleader>d' },
 	plugins = {
 		marks = true, -- shows a list of your marks on ' and `
 		registers = false, -- shows your registers on " in NORMAL or <C-r> in INSERT mode

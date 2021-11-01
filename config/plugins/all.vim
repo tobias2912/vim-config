@@ -4,6 +4,7 @@
 if dein#tap('fern.vim')
 	nnoremap <LocalLeader>e <cmd>Fern -toggle -drawer .<CR>
 	nnoremap <LocalLeader>a <cmd>Fern -reveal=% -drawer .<CR>
+	nnoremap <C-e> <cmd>Fern -reveal=% -drawer .<CR>
 endif
 
 if dein#tap('symbols-outline.nvim')
@@ -149,7 +150,7 @@ if dein#tap('trouble.nvim')
 	nnoremap <leader>xl <cmd>TroubleToggle loclist<CR>
 	nnoremap ]t <cmd>lua require("trouble").next({skip_groups = true, jump = true})<CR>
 	nnoremap [t <cmd>lua require("trouble").previous({skip_groups = true, jump = true})<CR>
-	nnoremap gR <cmd>TroubleToggle lsp_references<CR>
+	" nnoremap gR <cmd>TroubleToggle lsp_references<CR>
 endif
 
 if dein#tap('diffview.nvim')
@@ -167,6 +168,7 @@ endif
 
 if dein#tap('neogit')
 	nnoremap <Leader>mg <cmd>Neogit<CR>
+	nnoremap <leader>gs <cmd>Neogit<CR>
 endif
 
 if dein#tap('gina.vim')
@@ -174,7 +176,7 @@ if dein#tap('gina.vim')
 	nnoremap <silent> <leader>gd <cmd>Gina compare<CR>
 	nnoremap <silent> <leader>gc <cmd>Gina commit<CR>
 	nnoremap <silent> <leader>gb <cmd>Gina blame --width=40<CR>
-	nnoremap <silent> <leader>gs <cmd>Gina status -s<CR>
+	" nnoremap <silent> <leader>gs <cmd>Gina status -s<CR>
 	nnoremap <silent> <leader>gl <cmd>Gina log --graph --all<CR>
 	nnoremap <silent> <leader>gF <cmd>Gina! fetch<CR>
 	nnoremap <silent> <leader>gp <cmd>Gina! push<CR>

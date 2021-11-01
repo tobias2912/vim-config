@@ -11,8 +11,11 @@ local preload = function()
 	keymap('n', '<localleader>r', '<cmd>Telescope resume<CR>', opts)
 	keymap('n', '<localleader>R', '<cmd>Telescope pickers<CR>', opts)
 	keymap('n', '<localleader>f', '<cmd>Telescope find_files<CR>', opts)
+	keymap('n', '<C-p>', '<cmd>Telescope find_files<CR>', opts)
 	keymap('n', '<localleader>g', '<cmd>Telescope live_grep<CR>', opts)
+	keymap('n', '<C-f>', '<cmd>Telescope live_grep<CR>', opts)
 	keymap('n', '<localleader>b', '<cmd>Telescope buffers<CR>', opts)
+	keymap('n', '<C-b>', '<cmd>Telescope buffers<CR><ESC>', opts)
 	keymap('n', '<localleader>h', '<cmd>Telescope highlights<CR>', opts)
 	keymap('n', '<localleader>j', '<cmd>Telescope jumplist<CR>', opts)
 	keymap('n', '<localleader>m', '<cmd>Telescope marks<CR>', opts)
@@ -25,6 +28,7 @@ local preload = function()
 	keymap('n', '<localleader>z', '<cmd>lua require"plugins.telescope".pickers.zoxide()<CR>', opts)
 	keymap('n', '<localleader>;', '<cmd>Telescope command_history<CR>', opts)
 	keymap('n', '<localleader>/', '<cmd>Telescope search_history<CR>', opts)
+	keymap('n', '<leader>c', '<cmd>Telescope colorscheme<CR>', opts)
 
 	-- git_commits    git_bcommits   git_branches
 	-- git_status     git_stash      git_files
@@ -46,7 +50,7 @@ local preload = function()
 	-- LSP related
 	keymap('n', '<localleader>dd', '<cmd>Telescope lsp_definitions<CR>', opts)
 	keymap('n', '<localleader>di', '<cmd>Telescope lsp_implementations<CR>', opts)
-	keymap('n', '<localleader>dr', '<cmd>Telescope lsp_references<CR>', opts)
+	keymap('n', '<localleader>r', '<cmd>Telescope lsp_references<CR>', opts)
 	keymap('n', '<localleader>da', '<cmd>Telescope lsp_code_actions<CR>', opts)
 	keymap('x', '<localleader>da', ':Telescope lsp_range_code_actions<CR>', opts)
 end
@@ -275,7 +279,6 @@ local setup = function()
 					['<C-b>'] = actions.preview_scrolling_up,
 					['<C-f>'] = actions.preview_scrolling_down,
 				},
-
 				n = {
 					['q']     = actions.close,
 					['<Esc>'] = actions.close,
@@ -325,7 +328,7 @@ local setup = function()
 				sort_mru = true,
 				show_all_buffers = true,
 				ignore_current_buffer = true,
-				path_display = { shorten = 5 },
+				path_display = { shorten = 6 },
 				layout_config = {
 					width = width_for_nopreview,
 					height = height_dropdown_nopreview,
@@ -357,7 +360,7 @@ local setup = function()
 				enable_preview = true,
 				-- previewer = false,
 				-- theme = 'dropdown',
-				layout_config = { width = 0.45, height = 0.8 },
+				layout_config = { width = 0.25, height = 0.8 },
 			},
 			highlights = {
 				layout_strategy = 'horizontal',
@@ -408,6 +411,7 @@ local setup = function()
 				layout_config = { width = 0.95, height = 0.85, preview_width = 0.45 },
 			},
 			lsp_references = {
+				previewer = true,
 				layout_strategy = 'horizontal',
 				layout_config = { width = 0.95, height = 0.85, preview_width = 0.45 },
 			},
