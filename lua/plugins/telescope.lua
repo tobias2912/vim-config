@@ -425,12 +425,7 @@ local setup = function()
 	}
 
 	-- Enable indent-guides in telescope preview
-	vim.cmd [[
-		augroup telescope_events
-			autocmd!
-			autocmd User TelescopePreviewerLoaded setlocal list | IndentGuidesEnable
-		augroup END
-	]]
+
 
 	-- Telescope extensions are loaded in each plugin.
 end
