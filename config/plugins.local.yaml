@@ -1,0 +1,6 @@
+- repo: itchyny/lightline.vim
+#- repo: vim-airline/vim-airline
+#- repo: glepnir/galaxyline.nvim
+- repo: psliwka/vim-smoothie
+- repo: https://github.com/Pocco81/AutoSave.nvim
+- repo: https://github.com/nvim-telescope/telescope-frecency.nvim
