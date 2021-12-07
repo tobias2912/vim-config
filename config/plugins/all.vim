@@ -195,6 +195,7 @@ endif
 if dein#tap('any-jump.vim')
 	" Normal mode: Jump to definition under cursor
 	nnoremap <silent> <leader>ii <cmd>AnyJump<CR>
+	nnoremap <silent> gr <cmd>AnyJump<CR>
 
 	" Visual mode: jump to selected text in visual mode
 	xnoremap <silent> <leader>ii <cmd>AnyJumpVisual<CR>

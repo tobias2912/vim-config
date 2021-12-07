@@ -4,7 +4,7 @@
 
 require('goto-preview').setup({
 	-- debug = false,
-	width = 78,
+	width=78,
 	height = 15,
 	default_mappings = false,
 	opacity = 10,

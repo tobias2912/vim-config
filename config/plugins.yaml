@@ -71,7 +71,7 @@
 
 - repo: folke/which-key.nvim
   if: has('nvim-0.5')
-  on_cmd: WhichKey
+  # on_cmd: WhichKey
   hook_post_source: lua require('plugins.which-key')
 
 - repo: tversteeg/registers.nvim
@@ -96,6 +96,7 @@
   hook_add: |-
     let g:any_jump_disable_default_keybindings = 1
     autocmd user_events FileType any-jump setlocal cursorline
+  hook_post_source: lua require('plugins.any-jump')
 
 - repo: kana/vim-niceblock
   on_map: { x: <Plug> }
@@ -313,7 +314,11 @@
   hook_add: lua require('plugins.telescope').preload()
   hook_post_source: lua require('plugins.telescope').setup()
 
-- repo: rmagatti/session-lens
+# - repo: rmagatti/session-lens
+#   if: has('nvim-0.5')
+#   lazy: true
+#   hook_post_source: lua require('plugins.session-lens')
+- repo: tobias2912/session-lens
   if: has('nvim-0.5')
   lazy: true
   hook_post_source: lua require('plugins.session-lens')

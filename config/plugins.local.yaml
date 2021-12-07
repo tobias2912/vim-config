@@ -3,4 +3,13 @@
 #- repo: glepnir/galaxyline.nvim
 - repo: psliwka/vim-smoothie
 - repo: https://github.com/Pocco81/AutoSave.nvim
+  on_event: VimEnter
 - repo: https://github.com/nvim-telescope/telescope-frecency.nvim
+  on_event: VimEnter
+- repo: lervag/vimtex
+- repo: tpope/vim-surround
+  on_event: VimEnter
+- repo: folke/which-key.nvim
+  if: has('nvim-0.5')
+  on_event: VimEnter
+  hook_post_source: lua require('plugins.which-key')
