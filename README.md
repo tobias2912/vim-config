@@ -100,7 +100,7 @@ Works best with [Neovim] 0.5.x ⚠️ For Vim 8.x, use the
 
 ```bash
 mkdir ~/.config
-git clone git://github.com/rafi/vim-config.git ~/.config/nvim
+git clone git://github.com/tobias2912/vim-config.git ~/.config/nvim
 cd ~/.config/nvim
 ```
 
@@ -158,7 +158,7 @@ for example, here are some popular fonts:
 brew tap homebrew/cask-fonts
 brew search nerd-font
 brew install --cask font-victor-mono-nerd-font
-brew install --cask font-iosevka-nerd-font-mono
+brew --cask font-iosevka-nerd-font-mono
 brew install --cask font-hack-nerd-font
 brew install --cask font-fira-code
 ```
