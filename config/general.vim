@@ -44,6 +44,7 @@ if has('clipboard') && has('vim_starting')
 	" set clipboard& clipboard+=unnamedplus
 	set clipboard& clipboard^=unnamed,unnamedplus
 endif
+set clipboard+=unnamedplus
 
 " }}}
 " Wildmenu {{{
