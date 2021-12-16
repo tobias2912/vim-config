@@ -75,9 +75,10 @@ function! MonkeyTerminalExec(cmd)
   wincmd p
 endfunction
 
+let g:BASH_Ctrl_j = 'off'
 " With this maps you can now toggle the terminal
-noremap <F7> :call MonkeyTerminalToggle()<cr>i
-noremap <C-j> :call MonkeyTerminalToggle()<cr>
+nnoremap <F7> :call MonkeyTerminalToggle()<cr>i
+nnoremap <C-j> :call MonkeyTerminalToggle()<cr>
 tnoremap <F7> <C-\><C-n>:call MonkeyTerminalToggle()<cr>
 tnoremap <C-j> <C-\><C-n>:call MonkeyTerminalToggle()<cr>
 

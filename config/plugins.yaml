@@ -10,8 +10,8 @@
 - repo: thinca/vim-localrc
 - { repo: rafi/awesome-vim-colorschemes, merged: 0 }
 
-- repo: christoomey/vim-tmux-navigator
-  if: "! (has('win32') || has('win64'))"
+# - repo: christoomey/vim-tmux-navigator
+#   if: "! (has('win32') || has('win64'))"
 
 - repo: tpope/vim-sleuth
   hook_add: |-
