@@ -3,7 +3,6 @@
 
 if dein#tap('fern.vim')
 	nnoremap <LocalLeader>e <cmd>Fern -toggle -drawer .<CR>
-	nnoremap <LocalLeader>a <cmd>Fern -reveal=% -drawer .<CR>
 	nnoremap <C-e> <cmd>Fern -reveal=% -drawer .<CR>
 endif
 

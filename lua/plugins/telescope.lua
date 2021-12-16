@@ -14,6 +14,7 @@ local preload = function()
 	keymap('n', '<C-p>', '<cmd>Telescope find_files<CR>', opts)
 	keymap('n', '<C-f>', '<cmd>Telescope live_grep<CR>', opts)
 	keymap('n', '<C-b>', '<cmd>Telescope buffers<CR><ESC>', opts)
+	keymap('n', '<leader>p', '<cmd>Telescope commands<CR>', opts)
 	-- keymap('n', '<localleader>h', '<cmd>Telescope highlights<CR>', opts)
 	-- keymap('n', '<localleader>j', '<cmd>Telescope jumplist<CR>', opts)
 	-- keymap('n', '<localleader>m', '<cmd>Telescope marks<CR>', opts)
@@ -35,8 +36,8 @@ local preload = function()
 	-- lsp_workspace_diagnostics     lsp_document_diagnostics
 
 	-- Location-specific find files/directories
-	keymap('n', '<localleader>n', '<cmd>lua require"plugins.telescope".pickers.plugin_directories()<CR>', opts)
-	keymap('n', '<localleader>w', '<cmd>lua require"plugins.telescope".pickers.notebook()<CR>', opts)
+	-- keymap('n', '<localleader>n', '<cmd>lua require"plugins.telescope".pickers.plugin_directories()<CR>', opts)
+	-- keymap('n', '<localleader>w', '<cmd>lua require"plugins.telescope".pickers.notebook()<CR>', opts) --crashes
 
 	-- Navigation
 	keymap('n', '<leader>/', '<cmd>Telescope current_buffer_fuzzy_find<CR>', opts)
@@ -49,8 +50,8 @@ local preload = function()
 	keymap('n', '<localleader>dd', '<cmd>Telescope lsp_definitions<CR>', opts)
 	keymap('n', '<localleader>di', '<cmd>Telescope lsp_implementations<CR>', opts)
 	keymap('n', '<localleader>r', '<cmd>Telescope lsp_references<CR>', opts)
-	keymap('n', '<localleader>da', '<cmd>Telescope lsp_code_actions<CR>', opts)
-	keymap('x', '<localleader>da', ':Telescope lsp_range_code_actions<CR>', opts)
+	keymap('n', '<localleader>a', '<cmd>Telescope lsp_code_actions<CR><Esc>', opts)
+	keymap('x', '<localleader>a', ':Telescope lsp_range_code_actions<CR><Esc>', opts)
 end
 
 -- Helpers
@@ -416,7 +417,7 @@ local setup = function()
 			lsp_code_actions = {
 				theme = 'cursor',
 				previewer = false,
-				layout_config = { width = 0.3, height = 0.4 },
+				layout_config = { width = 0.8, height = 0.4 },
 			},
 			lsp_range_code_actions = {
 				theme = 'cursor',
