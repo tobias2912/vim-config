@@ -146,9 +146,6 @@ nnoremap <Leader>cN *``cgN
 xnoremap <expr> <Leader>cn "y/\\V\<C-r>=escape(@\", '/')\<CR>\<CR>" . "``cgn"
 xnoremap <expr> <Leader>cN "y/\\V\<C-r>=escape(@\", '/')\<CR>\<CR>" . "``cgN"
 
-" Duplicate paragraph
-nnoremap <Leader>cp yap<S-}>p
-
 " Remove spaces at the end of lines
 nnoremap <Leader>cw <cmd>keeppatterns %substitute/\s\+$//e<CR>
 

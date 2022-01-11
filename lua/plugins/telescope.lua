@@ -50,7 +50,7 @@ local preload = function()
 	keymap('n', '<localleader>dd', '<cmd>Telescope lsp_definitions<CR>', opts)
 	keymap('n', '<localleader>di', '<cmd>Telescope lsp_implementations<CR>', opts)
 	keymap('n', '<localleader>r', '<cmd>Telescope lsp_references<CR>', opts)
-	keymap('n', '<localleader>a', '<cmd>Telescope lsp_code_actions<CR><Esc>', opts)
+	keymap('n', '<leader>a', '<cmd>Telescope lsp_code_actions<CR><Esc>', opts)
 	keymap('x', '<localleader>a', ':Telescope lsp_range_code_actions<CR><Esc>', opts)
 end
 

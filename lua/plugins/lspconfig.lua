@@ -36,8 +36,8 @@ local on_attach = function(client, bufnr)
 	map_buf('n', ',rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
 	map_buf('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
 	map_buf('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-	map_buf('n', '<Leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-	map_buf('n', '<Leader>ce', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+	-- map_buf('n', '<Leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+	map_buf('n', 'gh', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
 
 	-- lspsaga
 	-- buf_set_keymap('n', '<Leader>f', '<cmd>lua require("lspsaga.provider").lsp_finder()<CR>', opts)
@@ -203,14 +203,6 @@ if vim.fn.has('vim_starting') then
 		vim.cmd [[ do User LspAttachBuffers ]]
 	end)
 
-	-- global custom location-list diagnostics window toggle.
-	local args = { noremap = true, silent = true }
-	vim.api.nvim_set_keymap(
-		'n',
-		'<Leader>a',
-		'<cmd>lua require("user").diagnostic.publish_loclist(true)<CR>',
-		args
-	)
 
 	vim.api.nvim_exec([[
 		augroup user_lspconfig
