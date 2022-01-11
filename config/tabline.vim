@@ -21,6 +21,7 @@ let g:badge_exclude_window_count =
 
 " Display entire tabline
 function! Tabline()
+	return ''
 	if exists('g:SessionLoad')
 		" Skip tabline render during session loading
 		return ''
