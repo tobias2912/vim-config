@@ -8,6 +8,61 @@ let g:ale_fixers = {
 \   'tex':['textlint']
 \}
 
+  if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+  endif
+
+  " unicode symbols
+  let g:airline_left_sep = '»'
+  let g:airline_left_sep = '▶'
+  let g:airline_right_sep = '«'
+  let g:airline_right_sep = '◀'
+  let g:airline_symbols.colnr = ' ㏇:'
+  let g:airline_symbols.colnr = ' ℅:'
+  let g:airline_symbols.crypt = '🔒'
+  let g:airline_symbols.linenr = '☰'
+  let g:airline_symbols.linenr = ' ␊:'
+  let g:airline_symbols.linenr = ' ␤:'
+  let g:airline_symbols.linenr = '¶'
+  let g:airline_symbols.maxlinenr = ''
+  let g:airline_symbols.maxlinenr = '㏑'
+  let g:airline_symbols.branch = '⎇'
+  let g:airline_symbols.paste = 'ρ'
+  let g:airline_symbols.paste = 'Þ'
+  let g:airline_symbols.paste = '∥'
+  let g:airline_symbols.spell = 'Ꞩ'
+  let g:airline_symbols.notexists = 'Ɇ'
+  let g:airline_symbols.whitespace = 'Ξ'
+
+  " powerline symbols
+  let g:airline_left_sep = ''
+  let g:airline_left_alt_sep = ''
+  let g:airline_right_sep = ''
+  let g:airline_right_alt_sep = ''
+  let g:airline_symbols.branch = ''
+  let g:airline_symbols.colnr = ' :'
+  let g:airline_symbols.readonly = ''
+  let g:airline_symbols.linenr = ' :'
+  let g:airline_symbols.maxlinenr = '☰ '
+  let g:airline_symbols.dirty='⚡'
+
+  " old vim-powerline symbols
+  " let g:airline_left_sep = '⮀'
+  " let g:airline_left_alt_sep = '⮁'
+  " let g:airline_right_sep = '⮂'
+  " let g:airline_right_alt_sep = '⮃'
+  " let g:airline_symbols.branch = '⭠'
+  " let g:airline_symbols.readonly = '⭤'
+  " let g:airline_symbols.linenr = '⭡'
+
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#scrollbar#enabled = 1
+let g:airline_theme = 'papercolor'
+let g:airline_section_z = '%p%%%#__accent_bold#%{g:airline_symbols.linenr}%l%#__restore__#%#__accent_bold#/%L%{g:airline_symbols.maxlinenr}%#__restore__#%#__accent_bold#%{g:airline_symbols.colnr}%v%#__restore__#'
+let g:airline_section_z = '%p%%%#__accent_bold#%{g:airline_symbols.linenr}%l%#__restore__#%#__accent_bold#/%L%{g:airline_symbols.maxlinenr}%#__restore__#'
+
+let g:elite_mode = 1                     " Set arrow-keys to window resize
+let g:tabline_plugin_enable = 0          " Disable built-in tabline
 
 " With this function you can reuse the same terminal in neovim.
 " You can toggle the terminal and also send a command to the same terminal.
@@ -78,7 +133,7 @@ endfunction
 let g:BASH_Ctrl_j = 'off'
 " With this maps you can now toggle the terminal
 nnoremap <F7> :call MonkeyTerminalToggle()<cr>i
-nnoremap <C-j> :call MonkeyTerminalToggle()<cr>
+nnoremap <C-j> :call MonkeyTerminalToggle()<cr>i
 tnoremap <F7> <C-\><C-n>:call MonkeyTerminalToggle()<cr>
 tnoremap <C-j> <C-\><C-n>:call MonkeyTerminalToggle()<cr>
 
