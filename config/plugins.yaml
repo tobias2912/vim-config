@@ -314,14 +314,16 @@
   hook_add: lua require('plugins.telescope').preload()
   hook_post_source: lua require('plugins.telescope').setup()
 
-# - repo: rmagatti/session-lens
+- repo: rmagatti/session-lens
+  if: has('nvim-0.5')
+  depends: [auto-session]
+  on_event: VimEnter
+  # lazy: true
+  # hook_post_source: lua require('plugins.session-lens')
+# - repo: tobias2912/session-lens
 #   if: has('nvim-0.5')
 #   lazy: true
 #   hook_post_source: lua require('plugins.session-lens')
-- repo: tobias2912/session-lens
-  if: has('nvim-0.5')
-  lazy: true
-  hook_post_source: lua require('plugins.session-lens')
 
 - repo: jvgrootveld/telescope-zoxide
   if: has('nvim-0.5')

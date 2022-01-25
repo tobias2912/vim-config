@@ -1,7 +1,7 @@
-# - repo: itchyny/lightline.vim
 - repo: vim-airline/vim-airline
+  #- repo: glepnir/galaxyline.nvim
+  # - repo: itchyny/lightline.vim
 - repo: vim-airline/vim-airline-themes
-#- repo: glepnir/galaxyline.nvim
 - repo: psliwka/vim-smoothie
 - repo: https://github.com/Pocco81/AutoSave.nvim
   on_event: VimEnter
@@ -14,3 +14,7 @@
   if: has('nvim-0.5')
   on_event: VimEnter
   hook_post_source: lua require('plugins.which-key')
+- repo: ryanoasis/vim-devicons
+  on_event: VimEnter
+- repo: mhinz/vim-startify
+  on_event: VimEnter

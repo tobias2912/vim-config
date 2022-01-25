@@ -276,8 +276,8 @@ endif
 nnoremap <Leader>ml <cmd>call <SID>append_modeline()<CR>
 
 " Source line and selection in vim
-xnoremap <Leader>S y:execute @@<CR>:echo 'Sourced selection.'<CR>
-nnoremap <Leader>S ^vg_y:execute @@<CR>:echo 'Sourced line.'<CR>
+" xnoremap <Leader>S y:execute @@<CR>:echo 'Sourced selection.'<CR>
+" nnoremap <Leader>S ^vg_y:execute @@<CR>:echo 'Sourced line.'<CR>
 
 " Context-aware action-menu, neovim only (see plugin/actionmenu.vim)
 if has('nvim')

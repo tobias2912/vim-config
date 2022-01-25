@@ -134,8 +134,9 @@ set shiftwidth=2    " Number of spaces to use in auto(indent)
 set softtabstop=-1  " Automatically keeps in sync with shiftwidth
 set smarttab        " Tab insert blanks according to 'shiftwidth'
 set autoindent      " Use same indenting on new lines
-" set smartindent     " Smart autoindenting on new lines
+set smartindent     " Smart autoindenting on new lines
 set shiftround      " Round indent to multiple of 'shiftwidth'
+
 
 " }}}
 " Timing {{{
@@ -172,7 +173,7 @@ endif
 " }}}
 " Formatting {{{
 " --------
-set nowrap                      " No wrap by default
+set wrap                      " No wrap by default
 set linebreak                   " Break long lines at 'breakat'
 set breakat=\ \	;:,!?           " Long lines break chars
 set nostartofline               " Cursor in same column for few commands
@@ -237,6 +238,7 @@ set cmdwinheight=5      " Command-line lines
 set equalalways         " Resize windows on split or close
 set laststatus=2        " Always show a status line
 set colorcolumn=+0      " Column highlight at textwidth's max character-limit
+"set colorcolumn=      " Column highlight at textwidth's max character-limit
 set display=lastline
 
 " Set popup max width/height.

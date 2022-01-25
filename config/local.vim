@@ -1,3 +1,4 @@
+" highlight colorcolumn guibg=#303030 "messes up toggle wrap
 let g:ale_fixers = {
 \   'javascript': ['prettier', 'eslint'],
 \   'typescript': ['prettier', 'eslint'],
@@ -8,6 +9,7 @@ let g:ale_fixers = {
 \   'tex':['textlint']
 \}
 
+nnoremap <Tab> %
   if !exists('g:airline_symbols')
     let g:airline_symbols = {}
   endif
@@ -130,6 +132,7 @@ function! MonkeyTerminalExec(cmd)
   wincmd p
 endfunction
 
+"stop term from interpreting C-j
 let g:BASH_Ctrl_j = 'off'
 " With this maps you can now toggle the terminal
 nnoremap <F7> :call MonkeyTerminalToggle()<cr>i
