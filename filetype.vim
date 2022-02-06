@@ -9,13 +9,13 @@ augroup filetypedetect "{{{
 
 	autocmd BufNewFile,BufRead */.config/git/users/* setfiletype gitconfig
 
+	autocmd BufRead,BufNewFile */templates/*.{yaml,tpl} setfiletype helm
 	autocmd BufNewFile,BufRead */playbooks/*.{yml,yaml} setfiletype yaml.ansible
 	autocmd BufNewFile,BufRead */inventory/*            setfiletype ansible_hosts
 	" autocmd BufNewFile,BufRead */templates/*.{yaml,tpl} setfiletype yaml.gotexttmpl
 
-	autocmd BufNewFile,BufRead *.hcl                setfiletype hcl
-	autocmd BufRead,BufNewFile *.tf,*.tfvars        setfiletype terraform
-	autocmd BufNewFile,BufRead go.mod               setfiletype gomod
+	autocmd BufRead,BufNewFile *.hcl                setfiletype hcl
+	autocmd BufNewFile,BufRead *.tf,*.tfvars        setfiletype terraform
 	autocmd BufNewFile,BufRead go.sum               setfiletype go
 
 	autocmd BufNewFile,BufRead yarn.lock            setfiletype yaml
@@ -24,9 +24,7 @@ augroup filetypedetect "{{{
 	autocmd BufNewFile,BufRead .tern-{project,port} setfiletype json
 	autocmd BufNewFile,BufRead *.js.map             setfiletype json
 	autocmd BufNewFile,BufRead .jsbeautifyrc        setfiletype json
-	autocmd BufNewFile,BufRead .eslintrc            setfiletype json
 	autocmd BufNewFile,BufRead .jscsrc              setfiletype json
-	autocmd BufNewFile,BufRead .babelrc             setfiletype json
 	autocmd BufNewFile,BufRead .watchmanconfig      setfiletype json
 	autocmd BufNewFile,BufRead .buckconfig          setfiletype toml
 	autocmd BufNewFile,BufRead .flowconfig          setfiletype ini

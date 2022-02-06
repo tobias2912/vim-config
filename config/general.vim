@@ -20,6 +20,15 @@ if has('vim_starting')
 	scriptencoding utf-8
 endif
 
+" History and persistence
+set history=2000
+
+if has('nvim') && ! has('win32') && ! has('win64')
+	set shada='400,<20,@100,s10,f1,h,r/tmp,r/private/var
+else
+	set viminfo='400,<20,@50,f1,h,n$HOME/.cache/viminfo
+endif
+
 " What to save for views and sessions
 set viewoptions=folds,cursor,curdir
 set sessionoptions=curdir,help,tabpages,winsize
@@ -47,21 +56,6 @@ endif
 set clipboard+=unnamedplus
 
 " }}}
-" Wildmenu {{{
-" --------
-if has('wildmenu')
-	if ! has('nvim')
-		set nowildmenu
-		set wildmode=list:longest,full
-	endif
-	set wildignorecase
-	set wildignore+=.git,.hg,.svn,.stversions,*.pyc,*.spl,*.o,*.out,*~,%*
-	set wildignore+=*.jpg,*.jpeg,*.png,*.gif,*.zip,**/tmp/**,*.DS_Store
-	set wildignore+=**/node_modules/**,**/bower_modules/**,*/.sass-cache/*
-	set wildignore+=__pycache__,*.egg-info,.pytest_cache,.mypy_cache/**
-endif
-
-" }}}
 " Vim Directories {{{
 " ---------------
 set undofile
@@ -74,22 +68,13 @@ if ! has('nvim')
 	set spellfile=$VIM_DATA_PATH/spell/en.utf-8.add
 endif
 
-" History saving
-set history=2000
-
-if has('nvim') && ! has('win32') && ! has('win64')
-	set shada='400,<20,@100,s10,f1,h,r/tmp,r/private/var
-else
-	set viminfo='400,<20,@50,f1,h,n$HOME/.cache/viminfo
-endif
-
 augroup user_persistent_undo
 	autocmd!
 	au BufWritePre /tmp/*          setlocal noundofile
-	au BufWritePre COMMIT_EDITMSG  setlocal noundofile
-	au BufWritePre MERGE_MSG       setlocal noundofile
 	au BufWritePre *.tmp           setlocal noundofile
 	au BufWritePre *.bak           setlocal noundofile
+	au BufWritePre COMMIT_EDITMSG  setlocal noundofile noswapfile
+	au BufWritePre MERGE_MSG       setlocal noundofile noswapfile
 augroup END
 
 " If sudo, disable vim swap/backup/undo/shada/viminfo writing
@@ -97,14 +82,15 @@ if $SUDO_USER !=# '' && $USER !=# $SUDO_USER
 		\ && $HOME !=# expand('~' . $USER, 1)
 		\ && $HOME ==# expand('~' . $SUDO_USER, 1)
 
+	set nomodeline
 	set noswapfile
 	set nobackup
 	set nowritebackup
 	set noundofile
 	if has('nvim')
-		set shada="NONE"
+		set shadafile=NONE
 	else
-		set viminfo="NONE"
+		set viminfofile=NONE
 	endif
 endif
 
@@ -181,7 +167,6 @@ set whichwrap+=h,l,<,>,[,],~    " Move to following line on certain keys
 set splitbelow splitright       " Splits open bottom right
 set switchbuf=uselast           " Use last window with quickfix entries
 set backspace=indent,eol,start  " Intuitive backspacing in insert mode
-set diffopt=filler,iwhite       " Diff mode: show fillers, ignore whitespace
 
 if exists('&breakindent')
 	set breakindentopt=shift:2,min:20
@@ -195,7 +180,7 @@ if has('patch-7.3.541')
 endif
 
 " }}}
-" Completion {{{
+" Completion and Diff {{{
 " --------
 set complete=.,w,b,k  " C-n completion: Scan buffers, windows and dictionary
 
@@ -204,15 +189,24 @@ if has('patch-7.4.775')
 	set completeopt+=noselect     " Do not select a match in the menu.
 endif
 
+set diffopt+=iwhite             " Diff mode: ignore whitespace
 if has('patch-8.1.0360') || has('nvim-0.5')
-	set diffopt=internal,algorithm:patience
-	" set diffopt=indent-heuristic,algorithm:patience
+	set diffopt+=indent-heuristic,algorithm:patience
 endif
 
 " Use the new Neovim :h jumplist-stack
-" if has('nvim-0.5')
-" 	set jumpoptions=stack
-" endif
+if has('nvim-0.5')
+	set jumpoptions=stack
+endif
+
+" Command-line completion
+if has('wildmenu')
+	set wildignorecase
+	set wildignore+=.git,.hg,.svn,.stversions,*.pyc,*.spl,*.o,*.out,*~,%*
+	set wildignore+=*.jpg,*.jpeg,*.png,*.gif,*.zip,**/tmp/**,*.DS_Store
+	set wildignore+=**/node_modules/**,**/bower_modules/**,*/.sass-cache/*
+	set wildignore+=__pycache__,*.egg-info,.pytest_cache,.mypy_cache/**
+endif
 
 " }}}
 " Editor UI {{{
@@ -229,8 +223,8 @@ set showtabline=2       " Always show the tabs line
 set helpheight=0        " Disable help window resizing
 set winwidth=30         " Minimum width for active window
 set winminwidth=10      " Minimum width for inactive windows
-" set winheight=1         " Minimum height for active window
-" set winminheight=0      " Minimum height for inactive window
+set winheight=1         " Minimum height for active window
+set winminheight=1      " Minimum height for inactive window
 
 set noshowcmd           " Don't show command in status line
 set cmdheight=1         " Height of the command line
@@ -242,9 +236,9 @@ set colorcolumn=+0      " Column highlight at textwidth's max character-limit
 set display=lastline
 
 " Set popup max width/height.
-set pumheight=15        " Pop-up menu's line height
+set pumheight=15        " Maximum number of items to show in the popup menu
 if exists('+pumwidth')
-	set pumwidth=10       " Pop-up menu's line width
+	set pumwidth=10       " Minimum width for the popup menu
 endif
 
 " UI Symbols
@@ -273,30 +267,29 @@ augroup user_general_settings
 
 	" Show sign column only for normal file buffers.
 	if exists('&signcolumn')
-		autocmd FileType * if empty(&buftype) | setlocal signcolumn=yes | endif
+		autocmd FileType * if empty(&buftype)
+			\ | setlocal signcolumn=yes
+			\ | endif
 	endif
 
-	" Highlight current line only on focused window, unless:
-	" 1. Cursor-line is already set to wanted value
-	" 2. Denite or Clap buffers
-	" 3. Preview window
-	" 4. Completion popup menu is visible
+	" Highlight current line only on focused normal buffer windows
 	autocmd WinEnter,BufEnter,InsertLeave *
 		\ if ! &cursorline && empty(&buftype)
 		\ | setlocal cursorline
 		\ | endif
 
+	" Hide cursor line when leaving normal non-diff windows
 	autocmd WinLeave,BufLeave,InsertEnter *
-		\ if &cursorline && empty(&buftype) && ! &previewwindow && ! pumvisible()
+		\ if &cursorline && ! &diff && empty(&buftype) && ! &pvw && ! pumvisible()
 		\ | setlocal nocursorline
 		\ | endif
 
 	" Reload vim configuration automatically on-save
-	autocmd BufWritePost $VIM_PATH/{*.vim,*.yaml,vimrc} nested
+	autocmd BufWritePost $VIM_PATH/{*.vim,*.yaml,vimrc} ++nested
 		\ source $MYVIMRC | redraw
 
 	" Automatically set read-only for files being edited elsewhere
-	" autocmd SwapExists * nested let v:swapchoice = 'o'
+	autocmd SwapExists * ++nested let v:swapchoice = 'o'
 
 	" Update diff comparison once leaving insert mode
 	autocmd InsertLeave * if &l:diff | diffupdate | endif
@@ -324,14 +317,14 @@ augroup user_general_settings
 	endif
 
 	" Update filetype on save if empty
-	autocmd BufWritePost * nested
+	autocmd BufWritePost * ++nested
 		\ if &l:filetype ==# '' || exists('b:ftdetect')
 		\ |   unlet! b:ftdetect
 		\ |   filetype detect
 		\ | endif
 
 	" Reload Vim script automatically if setlocal autoread
-	autocmd BufWritePost,FileWritePost *.vim nested
+	autocmd BufWritePost,FileWritePost *.vim ++nested
 		\ if &l:autoread > 0 | source <afile> |
 		\   echo 'source ' . bufname('%') |
 		\ endif
@@ -356,17 +349,18 @@ augroup user_general_settings
 augroup END
 
 " }}}
-augroup user_plugin_filetype " {{{
+" Filetype specific configuration {{{
+" --------
+augroup user_plugin_filetype
 	autocmd!
 
 	autocmd FileType apache,html setlocal path+=./;/
 
-	autocmd FileType helm setlocal commentstring=#\ %s
+	autocmd FileType helm setlocal expandtab
 
 	autocmd FileType crontab setlocal nobackup nowritebackup
 
-	autocmd FileType yaml,yaml.docker-compose
-		\ setlocal expandtab tabstop=2 shiftwidth=2
+	autocmd FileType yaml setlocal expandtab tabstop=2 shiftwidth=2
 
 	autocmd FileType gitcommit setlocal spell
 
@@ -374,20 +368,18 @@ augroup user_plugin_filetype " {{{
 
 	autocmd FileType php setlocal matchpairs-=<:> iskeyword+=\\
 
-	autocmd FileType python
-		\ setlocal expandtab smarttab nosmartindent
-		\ | setlocal tabstop=4 shiftwidth=4 textwidth=80
+	autocmd FileType terraform setlocal expandtab
+
+	" autocmd FileType python
+	" 	\ setlocal expandtab nosmartindent tabstop=4 shiftwidth=4
 
 	autocmd FileType markdown
-		\ setlocal expandtab spell autoindent formatoptions=tcroqn2 comments=n:>
-
-	" https://webpack.github.io/docs/webpack-dev-server.html#working-with-editors-ides-supporting-safe-write
-	autocmd FileType css,javascript,javascriptreact setlocal backupcopy=yes
+		\ setlocal expandtab spell formatoptions=tcroqn2 comments=n:>
 
 augroup END
 
 " }}}
-" Internal vim plugins {{{
+" Built-in runtime plugins {{{
 let g:sh_no_error = 1
 let g:python_recommended_style = 0
 let g:vimsyntax_noerror = 1
@@ -423,12 +415,6 @@ endfunction
 augroup user_theme
 	autocmd!
 	autocmd ColorScheme * call s:theme_autoload()
-
-	if has('patch-8.0.1781') || has('nvim-0.3.2')
-		autocmd ColorSchemePre * if exists('g:colors_name')
-			\| highlight clear
-			\| endif
-	endif
 augroup END
 
 " Load cached colorscheme or hybrid by default
@@ -437,6 +423,11 @@ if has('vim_starting') && ! exists('g:colors_name')
 	execute 'colorscheme' s:cached_colorscheme('hybrid')
 endif
 
+if has('patch-8.0.1781') || has('nvim-0.3.2')
+	autocmd user_theme ColorSchemePre * if exists('g:colors_name')
+		\| highlight clear
+		\| endif
+endif
 " }}}
 
 " vim: set foldmethod=marker ts=2 sw=2 tw=80 noet :
