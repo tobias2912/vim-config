@@ -154,8 +154,8 @@ nnoremap <Leader>cw <cmd>keeppatterns %substitute/\s\+$//e<CR>
 " ----------------
 
 " Use backspace key for matching parens
-nmap <BS> %
-xmap <BS> %
+nnoremap <BS> %
+xnoremap <BS> %
 
 " Repeat latest f, t, F or T
 nnoremap \ ;
@@ -168,17 +168,6 @@ xnoremap sg :s//gc<Left><Left><Left>
 
 " C-r: Easier search and replace visual/select mode
 xnoremap <C-r> :<C-u>%s/\V<C-R>=<SID>get_selection()<CR>//gc<Left><Left><Left>
-
-" Returns visually selected text
-function! s:get_selection() abort "{{{
-	try
-		let a_save = @a
-		silent! normal! gv"ay
-		return substitute(escape(@a, '\/'), '\n', '\\n', 'g')
-	finally
-		let @a = a_save
-	endtry
-endfunction "}}}
 
 " }}}
 " Command & History {{{
@@ -310,6 +299,11 @@ if get(g:, 'enable_universal_quit_mapping', 1)
 		\  if ! maparg('q', 'n')
 		\|   nnoremap <buffer> q <cmd>quit<CR>
 		\| endif
+
+	if &diff && has('vim_starting')
+		set cursorline
+		nnoremap q <cmd>quit<CR>
+	endif
 endif
 
 " Switch with adjacent window
@@ -342,16 +336,41 @@ nmap [Window]h <cmd>call <SID>toggle_background()<CR>
 " -------------------------
 
 function! s:visual_paste(direction) range abort "{{{
-	let registers = {}
-	for name in ['"', '0']
-		let registers[name] = {'type': getregtype(name), 'value': getreg(name)}
-	endfor
+	try
+		let registers = {}
+		for name in ['"', '0']
+			let registers[name] = {'type': getregtype(name), 'value': getreg(name)}
+		endfor
+		execute 'normal!' 'gv' . a:direction
+	finally
+		for [name, register] in items(registers)
+			call setreg(name, register.value, register.type)
+		endfor
+	endtry
+endfunction "}}}
 
-	execute 'normal!' 'gv' . a:direction
+" Returns visually selected text
+function! s:get_selection() abort "{{{
+	try
+		let reg = 's'
+		let [save_reg, save_type] = [getreg(reg), getregtype(reg)]
+		silent! normal! gv"sy
+		return substitute(escape(@s, '\/'), '\n', '\\n', 'g')
+	finally
+		call setreg(reg, save_reg, save_type)
+	endtry
+endfunction "}}}
 
-	for [name, register] in items(registers)
-		call setreg(name, register.value, register.type)
-	endfor
+function! s:visual_search(cmdtype) "{{{
+	try
+		let reg = 's'
+		let [save_reg, save_type] = [getreg(reg), getregtype(reg)]
+		silent! normal! gv"sy
+		let @/ = '\V' . substitute(escape(@s, a:cmdtype . '\'), '\n', '\\n', 'g')
+		call histadd('/', @/)
+	finally
+		call setreg(reg, save_reg, save_type)
+	endtry
 endfunction "}}}
 
 " Append modeline after last line in buffer
@@ -428,6 +447,317 @@ function! s:zoom() "{{{
 		normal! ze
 	endif
 endfunction "}}}
+
+" }}}
+" Plugin Keyboard-Mappings {{{
+" ---
+
+if dein#tap('telescope.nvim')
+	" General pickers
+	nnoremap <localleader>r <cmd>Telescope resume<CR>
+	nnoremap <localleader>R <cmd>Telescope pickers<CR>
+	nnoremap <localleader>f <cmd>Telescope find_files<CR>
+	nnoremap <localleader>g <cmd>Telescope live_grep<CR>
+	nnoremap <localleader>b <cmd>Telescope buffers<CR>
+	nnoremap <localleader>h <cmd>Telescope highlights<CR>
+	nnoremap <localleader>j <cmd>Telescope jumplist<CR>
+	nnoremap <localleader>m <cmd>Telescope marks<CR>
+	nnoremap <localleader>o <cmd>Telescope vim_options<CR>
+	nnoremap <localleader>t <cmd>Telescope lsp_dynamic_workspace_symbols<CR>
+	nnoremap <localleader>v <cmd>Telescope registers<CR>
+	nnoremap <localleader>u <cmd>Telescope spell_suggest<CR>
+	nnoremap <localleader>s <cmd>Telescope session-lens search_session<CR>
+	nnoremap <localleader>x <cmd>Telescope oldfiles<CR>
+	nnoremap <localleader>z <cmd>lua require('plugins.telescope').pickers.zoxide()<CR>
+	nnoremap <localleader>; <cmd>Telescope command_history<CR>
+	nnoremap <localleader>/ <cmd>Telescope search_history<CR>
+
+	" Git
+	nnoremap <leader>gs <cmd>Telescope git_status<CR>
+	nnoremap <leader>gr <cmd>Telescope git_branches<CR>
+	nnoremap <leader>gc <cmd>Telescope git_commits<CR>
+	nnoremap <leader>gC <cmd>Telescope git_bcommits<CR>
+	nnoremap <leader>gh <cmd>Telescope git_stash<CR>
+
+	" Location-specific find files/directories
+	nnoremap <localleader>n <cmd>lua require('plugins.telescope').pickers.plugin_directories()<CR>
+	nnoremap <localleader>w <cmd>lua require('plugins.telescope').pickers.notebook()<CR>
+
+	" Navigation
+	nnoremap <leader>/ <cmd>Telescope current_buffer_fuzzy_find<CR>
+	nnoremap <leader>gt <cmd>lua require('plugins.telescope').pickers.lsp_workspace_symbols_cursor()<CR>
+	nnoremap <leader>gf <cmd>lua require('plugins.telescope').pickers.find_files_cursor()<CR>
+	nnoremap <leader>gg <cmd>lua require('plugins.telescope').pickers.grep_string_cursor()<CR>
+	xnoremap <leader>gg <cmd>lua require('plugins.telescope').pickers.grep_string_visual()<CR>
+
+	" LSP related
+	nnoremap <localleader>dd <cmd>Telescope lsp_definitions<CR>
+	nnoremap <localleader>di <cmd>Telescope lsp_implementations<CR>
+	nnoremap <localleader>dr <cmd>Telescope lsp_references<CR>
+	nnoremap <localleader>da <cmd>Telescope lsp_code_actions<CR>
+	xnoremap <localleader>da :Telescope lsp_range_code_actions<CR>
+endif
+
+if dein#tap('fern.vim')
+	nnoremap <LocalLeader>e <cmd>Fern -toggle -drawer .<CR>
+	nnoremap <LocalLeader>a <cmd>Fern -reveal=% -drawer .<CR>
+endif
+
+if dein#tap('symbols-outline.nvim')
+	nnoremap <Leader>o <cmd>SymbolsOutline<CR>
+endif
+
+if dein#tap('vim-vsnip')
+	imap <expr><C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+	smap <expr><C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+endif
+
+if dein#tap('nvim-gps')
+	nnoremap <Leader>f <cmd>lua print(require'nvim-gps'.get_location())<CR>
+endif
+
+if dein#tap('emmet-vim')
+	autocmd user_events FileType html,css,vue,javascript,javascriptreact,svelte
+		\ EmmetInstall
+		\ | imap <silent><buffer> <C-y> <Plug>(emmet-expand-abbr)
+endif
+
+if dein#tap('vim-sandwich')
+	nmap ds <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
+	nmap dss <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
+	nmap cs <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
+	nmap css <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
+
+	nmap <silent> sa <Plug>(operator-sandwich-add)
+	xmap <silent> sa <Plug>(operator-sandwich-add)
+	omap <silent> sa <Plug>(operator-sandwich-add)
+	" omap <silent> sa <Plug>(operator-sandwich-g@)
+
+	nmap <silent> sd <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
+	" nmap <unique> sd <Plug>(sandwich-delete)
+	xmap <silent> sd <Plug>(operator-sandwich-delete)
+	nmap <silent> sdb <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
+
+	nmap <silent> sr <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
+	xmap <silent> sr <Plug>(operator-sandwich-replace)
+	nmap <silent> srb <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
+
+	omap ir <Plug>(textobj-sandwich-auto-i)
+	xmap ir <Plug>(textobj-sandwich-auto-i)
+	omap ab <Plug>(textobj-sandwich-auto-a)
+	xmap ab <Plug>(textobj-sandwich-auto-a)
+	" omap is <Plug>(textobj-sandwich-query-i)
+	" xmap is <Plug>(textobj-sandwich-query-i)
+	" omap as <Plug>(textobj-sandwich-query-a)
+	" xmap as <Plug>(textobj-sandwich-query-a)
+endif
+
+if dein#tap('vim-niceblock')
+	silent! xmap I  <Plug>(niceblock-I)
+	silent! xmap gI <Plug>(niceblock-gI)
+	silent! xmap A  <Plug>(niceblock-A)
+endif
+
+if dein#tap('accelerated-jk')
+	nmap <silent> j <Plug>(accelerated_jk_gj)
+	nmap <silent> k <Plug>(accelerated_jk_gk)
+endif
+
+if dein#tap('vim-edgemotion')
+	nmap gj <Plug>(edgemotion-j)
+	nmap gk <Plug>(edgemotion-k)
+	xmap gj <Plug>(edgemotion-j)
+	xmap gk <Plug>(edgemotion-k)
+endif
+
+if dein#tap('vim-quickhl')
+	nmap <Leader>mt <Plug>(quickhl-manual-this)
+	xmap <Leader>mt <Plug>(quickhl-manual-this)
+endif
+
+if dein#tap('vim-sidemenu')
+	nmap <Leader>l <Plug>(sidemenu)
+	xmap <Leader>l <Plug>(sidemenu-visual)
+endif
+
+if dein#tap('indent-blankline.nvim')
+	nmap <Leader>ti <cmd>IndentBlanklineToggle<CR>
+endif
+
+if dein#tap('nvim-bqf')
+	nmap <Leader>q <cmd>lua require('user').qflist.toggle()<CR>
+endif
+
+if dein#tap('goto-preview')
+	nnoremap gpd <cmd>lua require('goto-preview').goto_preview_definition()<CR>
+	nnoremap gpi <cmd>lua require('goto-preview').goto_preview_implementation()<CR>
+	nnoremap gpc <cmd>lua require('goto-preview').close_all_win()<CR>
+	nnoremap gpr <cmd>lua require('goto-preview').goto_preview_references()<CR>
+endif
+
+if dein#tap('committia.vim')
+	let g:committia_hooks = {}
+	function! g:committia_hooks.edit_open(info)
+		resize 10
+		imap <buffer><C-d> <Plug>(committia-scroll-diff-down-half)
+		imap <buffer><C-u> <Plug>(committia-scroll-diff-up-half)
+		imap <buffer><C-f> <Plug>(committia-scroll-diff-down-page)
+		imap <buffer><C-b> <Plug>(committia-scroll-diff-up-page)
+		imap <buffer><C-j> <Plug>(committia-scroll-diff-down)
+		imap <buffer><C-k> <Plug>(committia-scroll-diff-up)
+	endfunction
+endif
+
+if dein#tap('vim-shot-f')
+	nmap f  <Plug>(shot-f-f)
+	nmap F  <Plug>(shot-f-F)
+	nmap t  <Plug>(shot-f-t)
+	nmap T  <Plug>(shot-f-T)
+	xmap f  <Plug>(shot-f-f)
+	xmap F  <Plug>(shot-f-F)
+	xmap t  <Plug>(shot-f-t)
+	xmap T  <Plug>(shot-f-T)
+	omap f  <Plug>(shot-f-f)
+	omap F  <Plug>(shot-f-F)
+	omap t  <Plug>(shot-f-t)
+	omap T  <Plug>(shot-f-T)
+endif
+
+if dein#tap('todo-comments.nvim')
+	nnoremap <LocalLeader>dt <cmd>TodoTelescope<CR>
+endif
+
+if dein#tap('trouble.nvim')
+	nnoremap <leader>e <cmd>TroubleToggle document_diagnostics<CR>
+	nnoremap <leader>r <cmd>TroubleToggle workspace_diagnostics<CR>
+	nnoremap <leader>xq <cmd>TroubleToggle quickfix<CR>
+	nnoremap <leader>xl <cmd>TroubleToggle loclist<CR>
+	nnoremap ]t <cmd>lua require("trouble").next({skip_groups = true, jump = true})<CR>
+	nnoremap [t <cmd>lua require("trouble").previous({skip_groups = true, jump = true})<CR>
+	nnoremap gR <cmd>TroubleToggle lsp_references<CR>
+endif
+
+if dein#tap('diffview.nvim')
+	nnoremap <Leader>gv <cmd>DiffviewOpen<CR>
+endif
+
+if dein#tap('vimwiki')
+	nnoremap <Leader>W <cmd>VimwikiIndex<CR>
+endif
+
+if dein#tap('vim-choosewin')
+	nmap -         <Plug>(choosewin)
+	nmap <Leader>- <cmd>ChooseWinSwapStay<CR>
+endif
+
+if dein#tap('neogit')
+	nnoremap <Leader>mg <cmd>Neogit<CR>
+endif
+
+if dein#tap('gina.vim')
+	nnoremap <silent> <leader>ga <cmd>Gina add %:p<CR>
+	nnoremap <silent> <leader>gd <cmd>Gina compare<CR>
+	nnoremap <silent> <leader>gc <cmd>Gina commit<CR>
+	nnoremap <silent> <leader>gb <cmd>Gina blame<CR>
+	nnoremap <silent> <leader>gs <cmd>Gina status<CR>
+	nnoremap <silent> <leader>gl <cmd>Gina log --all<CR>
+	nnoremap <silent> <leader>gF <cmd>Gina! fetch<CR>
+	nnoremap <silent> <leader>gp <cmd>Gina! push<CR>
+	nnoremap <silent> <leader>go <cmd>,Gina browse :<CR>
+	xnoremap <silent> <leader>go :Gina browse :<CR>
+endif
+
+if dein#tap('zen-mode.nvim')
+	nnoremap <silent> <Leader>z <cmd>ZenMode<CR>
+endif
+
+if dein#tap('rest.nvim')
+	nmap <silent> ,ht <Plug>RestNvim
+endif
+
+if dein#tap('any-jump.vim')
+	" Normal mode: Jump to definition under cursor
+	nnoremap <silent> <leader>ii <cmd>AnyJump<CR>
+
+	" Visual mode: jump to selected text in visual mode
+	xnoremap <silent> <leader>ii <cmd>AnyJumpVisual<CR>
+
+	" Normal mode: open previous opened file (after jump)
+	nnoremap <silent> <leader>ib <cmd>AnyJumpBack<CR>
+
+	" Normal mode: open last closed search window again
+	nnoremap <silent> <leader>il <cmd>AnyJumpLastResults<CR>
+endif
+
+if dein#tap('nvim-spectre')
+	nnoremap <Leader>so <cmd>lua require('spectre').open()<CR>
+	" Search current word
+	nnoremap <Leader>sw <cmd>lua require('spectre').open_visual({select_word=true})<CR>
+	xnoremap <silent><Leader>s :lua require('spectre').open_visual()<CR>
+	" Search in current file
+	nnoremap <silent><Leader>sp viw:lua require('spectre').open_file_search()<cr>
+endif
+
+if dein#tap('undotree')
+	nnoremap <Leader>gu <cmd>UndotreeToggle<CR>
+endif
+
+if dein#tap('thesaurus_query.vim')
+	nnoremap <silent> <Leader>K <cmd>ThesaurusQueryReplaceCurrentWord<CR>
+endif
+
+if dein#tap('vim-asterisk')
+	nmap *   <Plug>(asterisk-g*)
+	nmap g*  <Plug>(asterisk-*)
+	nmap #   <Plug>(asterisk-g#)
+	nmap g#  <Plug>(asterisk-#)
+	xmap *   <Plug>(asterisk-g*)
+	xmap g*  <Plug>(asterisk-*)
+	xmap #   <Plug>(asterisk-g#)
+	xmap g#  <Plug>(asterisk-#)
+
+	nmap z*  <Plug>(asterisk-z*)
+	nmap gz* <Plug>(asterisk-gz*)
+	nmap z#  <Plug>(asterisk-z#)
+	nmap gz# <Plug>(asterisk-gz#)
+	xmap z*  <Plug>(asterisk-z*)
+	xmap gz* <Plug>(asterisk-gz*)
+	xmap z#  <Plug>(asterisk-z#)
+	xmap gz# <Plug>(asterisk-gz#)
+endif
+
+if dein#tap('nvim-ts-hint-textobject')
+	omap              am <cmd>lua require('tsht').nodes()<CR>
+	xnoremap <silent> am :lua require('tsht').nodes()<CR>
+endif
+
+if dein#tap('sideways.vim')
+	nnoremap <silent> <, <cmd>SidewaysLeft<CR>
+	nnoremap <silent> >, <cmd>SidewaysRight<CR>
+	nnoremap <silent> [, <cmd>SidewaysJumpLeft<CR>
+	nnoremap <silent> ], <cmd>SidewaysJumpRight<CR>
+	omap <silent> a, <Plug>SidewaysArgumentTextobjA
+	xmap <silent> a, <Plug>SidewaysArgumentTextobjA
+	omap <silent> i, <Plug>SidewaysArgumentTextobjI
+	xmap <silent> i, <Plug>SidewaysArgumentTextobjI
+endif
+
+if dein#tap('splitjoin.vim')
+	nmap sj <cmd>SplitjoinJoin<CR>
+	nmap sk <cmd>SplitjoinSplit<CR>
+endif
+
+if dein#tap('linediff.vim')
+	xnoremap <Leader>mdf :Linediff<CR>
+	xnoremap <Leader>mda :LinediffAdd<CR>
+	nnoremap <Leader>mds <cmd>LinediffShow<CR>
+	nnoremap <Leader>mdr <cmd>LinediffReset<CR>
+endif
+
+if dein#tap('dsf.vim')
+	nmap dsf <Plug>DsfDelete
+	nmap csf <Plug>DsfChange
+endif
 
 " }}}
 

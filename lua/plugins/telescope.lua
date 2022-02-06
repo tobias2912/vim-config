@@ -2,57 +2,56 @@
 -- see: https://github.com/nvim-telescope/telescope.nvim
 -- rafi settings
 
--- Global mappings preload
-local preload = function()
-	local keymap = vim.api.nvim_set_keymap
-	local opts = { noremap = true, silent = true }
+-- local preload = function()
+-- 	local keymap = vim.api.nvim_set_keymap
+-- 	local opts = { noremap = true, silent = true }
 
-	-- General pickers
-	keymap('n', '<localleader>r', '<cmd>Telescope resume<CR>', opts)
-	-- keymap('n', '<localleader>R', '<cmd>Telescope pickers<CR>', opts)
-	-- keymap('n', '<localleader>f', '<cmd>Telescope find_files<CR>', opts)
-	keymap('n', '<C-p>', '<cmd>Telescope find_files<CR>', opts)
-	keymap('n', '<C-f>', '<cmd>Telescope live_grep<CR>', opts)
-	keymap('n', '<C-b>', '<cmd>Telescope buffers<CR><ESC>', opts)
-	keymap('n', '<leader>p', '<cmd>Telescope commands<CR>', opts)
-	-- keymap('n', '<localleader>h', '<cmd>Telescope highlights<CR>', opts)
-	-- keymap('n', '<localleader>j', '<cmd>Telescope jumplist<CR>', opts)
-	-- keymap('n', '<localleader>m', '<cmd>Telescope marks<CR>', opts)
-	keymap('n', '<localleader>o', '<cmd>Telescope vim_options<CR>', opts)
-	keymap('n', '<localleader>t', '<cmd>Telescope lsp_dynamic_workspace_symbols<CR>', opts)
-	keymap('n', '<localleader>v', '<cmd>Telescope registers<CR>', opts)
-	keymap('n', '<leader>s', '<cmd>Telescope spell_suggest<CR><Esc>', opts)
-	keymap('n', '<localleader>s', '<cmd>Telescope session-lens search_session<CR><Esc>', opts)
-	-- keymap('n', '<localleader>x', '<cmd>Telescope oldfiles<CR>', opts)
-	-- keymap('n', '<localleader>z', '<cmd>lua require"plugins.telescope".pickers.zoxide()<CR>', opts)
-	keymap('n', '<localleader>;', '<cmd>Telescope command_history<CR>', opts)
-	keymap('n', '<localleader>/', '<cmd>Telescope search_history<CR>', opts)
-	keymap('n', '<leader>cc', '<cmd>Telescope colorscheme<CR>', opts)
+-- 	-- General pickers
+-- 	keymap('n', '<localleader>r', '<cmd>Telescope resume<CR>', opts)
+-- 	-- keymap('n', '<localleader>R', '<cmd>Telescope pickers<CR>', opts)
+-- 	-- keymap('n', '<localleader>f', '<cmd>Telescope find_files<CR>', opts)
+-- 	keymap('n', '<C-p>', '<cmd>Telescope find_files<CR>', opts)
+-- 	keymap('n', '<C-f>', '<cmd>Telescope live_grep<CR>', opts)
+-- 	keymap('n', '<C-b>', '<cmd>Telescope buffers<CR><ESC>', opts)
+-- 	keymap('n', '<leader>p', '<cmd>Telescope commands<CR>', opts)
+-- 	-- keymap('n', '<localleader>h', '<cmd>Telescope highlights<CR>', opts)
+-- 	-- keymap('n', '<localleader>j', '<cmd>Telescope jumplist<CR>', opts)
+-- 	-- keymap('n', '<localleader>m', '<cmd>Telescope marks<CR>', opts)
+-- 	keymap('n', '<localleader>o', '<cmd>Telescope vim_options<CR>', opts)
+-- 	keymap('n', '<localleader>t', '<cmd>Telescope lsp_dynamic_workspace_symbols<CR>', opts)
+-- 	keymap('n', '<localleader>v', '<cmd>Telescope registers<CR>', opts)
+-- 	keymap('n', '<leader>s', '<cmd>Telescope spell_suggest<CR><Esc>', opts)
+-- 	keymap('n', '<localleader>s', '<cmd>Telescope session-lens search_session<CR><Esc>', opts)
+-- 	-- keymap('n', '<localleader>x', '<cmd>Telescope oldfiles<CR>', opts)
+-- 	-- keymap('n', '<localleader>z', '<cmd>lua require"plugins.telescope".pickers.zoxide()<CR>', opts)
+-- 	keymap('n', '<localleader>;', '<cmd>Telescope command_history<CR>', opts)
+-- 	keymap('n', '<localleader>/', '<cmd>Telescope search_history<CR>', opts)
+-- 	keymap('n', '<leader>cc', '<cmd>Telescope colorscheme<CR>', opts)
 
-	-- git_commits    git_bcommits   git_branches
-	-- git_status     git_stash      git_files
-	-- file_browser   tags           fd             autocommands   quickfix
-	-- filetypes      commands       man_pages      help_tags      loclist
-	-- lsp_workspace_diagnostics     lsp_document_diagnostics
+-- 	-- git_commits    git_bcommits   git_branches
+-- 	-- git_status     git_stash      git_files
+-- 	-- file_browser   tags           fd             autocommands   quickfix
+-- 	-- filetypes      commands       man_pages      help_tags      loclist
+-- 	-- lsp_workspace_diagnostics     lsp_document_diagnostics
 
-	-- Location-specific find files/directories
-	-- keymap('n', '<localleader>n', '<cmd>lua require"plugins.telescope".pickers.plugin_directories()<CR>', opts)
-	-- keymap('n', '<localleader>w', '<cmd>lua require"plugins.telescope".pickers.notebook()<CR>', opts) --crashes
+-- 	-- Location-specific find files/directories
+-- 	-- keymap('n', '<localleader>n', '<cmd>lua require"plugins.telescope".pickers.plugin_directories()<CR>', opts)
+-- 	-- keymap('n', '<localleader>w', '<cmd>lua require"plugins.telescope".pickers.notebook()<CR>', opts) --crashes
 
-	-- Navigation
-	keymap('n', '<leader>/', '<cmd>Telescope current_buffer_fuzzy_find<CR>', opts)
-	keymap('n', 'gt', '<cmd>lua require"plugins.telescope".pickers.lsp_workspace_symbols_cursor()<CR>', opts)
-	keymap('n', '<leader>gf', '<cmd>lua require"plugins.telescope".pickers.find_files_cursor()<CR>', opts)
-	keymap('n', '<leader>gg', '<cmd>lua require"plugins.telescope".pickers.grep_string_cursor()<CR>', opts)
-	keymap('x', '<leader>gg', '<cmd>lua require"plugins.telescope".pickers.grep_string_visual()<CR>', opts)
+-- 	-- Navigation
+-- 	keymap('n', '<leader>/', '<cmd>Telescope current_buffer_fuzzy_find<CR>', opts)
+-- 	keymap('n', 'gt', '<cmd>lua require"plugins.telescope".pickers.lsp_workspace_symbols_cursor()<CR>', opts)
+-- 	keymap('n', '<leader>gf', '<cmd>lua require"plugins.telescope".pickers.find_files_cursor()<CR>', opts)
+-- 	keymap('n', '<leader>gg', '<cmd>lua require"plugins.telescope".pickers.grep_string_cursor()<CR>', opts)
+-- 	keymap('x', '<leader>gg', '<cmd>lua require"plugins.telescope".pickers.grep_string_visual()<CR>', opts)
 
-	-- LSP related
-	keymap('n', '<localleader>dd', '<cmd>Telescope lsp_definitions<CR>', opts)
-	keymap('n', '<localleader>di', '<cmd>Telescope lsp_implementations<CR>', opts)
-	keymap('n', '<localleader>r', '<cmd>Telescope lsp_references<CR>', opts)
-	keymap('n', '<leader>a', '<cmd>Telescope lsp_code_actions<CR><Esc>', opts)
-	keymap('x', '<localleader>a', ':Telescope lsp_range_code_actions<CR><Esc>', opts)
-end
+-- 	-- LSP related
+-- 	keymap('n', '<localleader>dd', '<cmd>Telescope lsp_definitions<CR>', opts)
+-- 	keymap('n', '<localleader>di', '<cmd>Telescope lsp_implementations<CR>', opts)
+-- 	keymap('n', '<localleader>r', '<cmd>Telescope lsp_references<CR>', opts)
+-- 	keymap('n', '<leader>a', '<cmd>Telescope lsp_code_actions<CR><Esc>', opts)
+-- 	keymap('x', '<localleader>a', ':Telescope lsp_range_code_actions<CR><Esc>', opts)
+-- end
 
 -- Helpers
 
@@ -122,9 +121,9 @@ pickers.lsp_workspace_symbols_cursor = function()
 end
 
 pickers.zoxide = function()
-	require'telescope'.extensions.zoxide.list({
+	require('telescope').extensions.zoxide.list({
 		layout_config = {
-			width = 0.4,
+			width = 0.5,
 			height = 0.6,
 		},
 	})
@@ -201,6 +200,14 @@ end
 local height_dropdown_nopreview = function(_, _, rows)
 	return math.floor(rows * 0.7)
 end
+
+-- Enable indent-guides in telescope preview
+vim.cmd [[
+	augroup telescope_events
+		autocmd!
+		autocmd User TelescopePreviewerLoaded setlocal wrap list number
+	augroup END
+]]
 
 -- On-demand setup
 local setup = function()
@@ -425,18 +432,27 @@ local setup = function()
 				layout_config = { width = 0.3, height = 0.4 },
 			},
 		},
+		extensions = {
+			['ui-select'] = {
+				require('telescope.themes').get_cursor {
+					layout_config = { width = 0.35, height = 0.35 },
+				}
+			}
+		}
 	}
 
+<<<<<<< HEAD
 	-- Enable indent-guides in telescope preview
 
 
+=======
+>>>>>>> 8ed6e3d529f2fe355f3a1a509bb6a7cb5ed19309
 	-- Telescope extensions are loaded in each plugin.
 end
 
 -- Public functions
 return {
 	setup = setup,
-	preload = preload,
 	pickers = pickers,
 }
 

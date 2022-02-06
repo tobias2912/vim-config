@@ -2,6 +2,12 @@
 --
 
 local config = {
+	filetypes = {
+		'yaml',
+		'yaml.ansible',
+		'yaml.docker-compose',
+		'helm',
+	},
 	settings = {
 		yaml = {
 			format = { enable = true, singleQuote = true },
@@ -14,19 +20,20 @@ local config = {
 			},
 			schemas = {
 				kubernetes = {
-					'helm/*.yaml',
-					'kube/*.yaml',
+					'helm/**/templates/**/*.yaml',
+					'kube/**/*.yaml',
 				},
-				['http://json.schemastore.org/github-workflow'] = '.github/workflows/*.{yml,yaml}',
-				['http://json.schemastore.org/github-action'] = '.github/action.{yml,yaml}',
-				['http://json.schemastore.org/ansible-stable-2.9'] = 'roles/tasks/*.{yml,yaml}',
-				['http://json.schemastore.org/ansible-playbook'] = 'playbook.{yml,yaml}',
-				['http://json.schemastore.org/prettierrc'] = '.prettierrc.{yml,yaml}',
-				['http://json.schemastore.org/stylelintrc'] = '.stylelintrc.{yml,yaml}',
-				['http://json.schemastore.org/circleciconfig'] = '.circleci/**/*.{yml,yaml}',
-				['http://json.schemastore.org/kustomization'] = 'kustomization.{yml,yaml}',
-				['http://json.schemastore.org/helmfile'] = 'helmfile.{yml,yaml}',
-				['http://json.schemastore.org/gitlab-ci'] = '/*lab-ci.{yml,yaml}',
+				['https://json.schemastore.org/github-workflow.json'] = '.github/workflows/*.{yml,yaml}',
+				['https://json.schemastore.org/github-action.json'] = '.github/action.{yml,yaml}',
+				['https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/editor/schema/ci.json'] = '/*lab-ci.{yml,yaml}',
+				['https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible-tasks.json'] = 'roles/tasks/**/*.{yml,yaml}',
+				['https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible-playbook.json'] = 'playbook{s,}/**/*.{yml,yaml}',
+				['https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible-inventory.json'] = 'inventory/*.{ini,yml}',
+				['https://json.schemastore.org/prettierrc.json'] = '.prettierrc.{yml,yaml}',
+				['https://json.schemastore.org/stylelintrc.json'] = '.stylelintrc.{yml,yaml}',
+				['https://json.schemastore.org/circleciconfig'] = '.circleci/**/*.{yml,yaml}',
+				['https://json.schemastore.org/kustomization'] = 'kustomization.{yml,yaml}',
+				['https://json.schemastore.org/helmfile'] = 'helmfile.{yml,yaml}',
 			}
 		}
 	}

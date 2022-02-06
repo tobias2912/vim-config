@@ -1,4 +1,3 @@
-
 " hybrid custom
 " ===
 
@@ -78,6 +77,11 @@ highlight! WarningMsg  ctermfg=100 guifg=#CCC566
 highlight! link QuickFixLine WildMenu
 highlight! link lspReference Visual
 
+highlight! DiagnosticError ctermfg=1   guifg=Red
+highlight! DiagnosticWarn  ctermfg=3   guifg=Orange
+highlight! DiagnosticInfo  ctermfg=4   guifg=LightBlue
+highlight! DiagnosticHint  ctermfg=143 guifg=#b5bd68
+
 " if has('nvim') || has('patch-7.4.2218')
 " 	highlight EndOfBuffer gui=NONE guifg=#303030
 " endif
@@ -138,11 +142,31 @@ hi! link mkdItalic htmlItalic
 
 " Plugin: IndentBlankline {{{
 " ---
-highlight! IndentBlanklineChar cterm=nocombine gui=nocombine guibg=#232527
-highlight! IndentBlanklineCharOdd cterm=nocombine gui=nocombine guibg=#292B2D
+" highlight! IndentBlanklineChar cterm=nocombine gui=nocombine guibg=#232527
+" highlight! IndentBlanklineCharOdd cterm=nocombine gui=nocombine guibg=#292B2D
+
 " highlight! IndentBlanklineSpaceChar cterm=nocombine gui=nocombine guifg=#373b41
 " highlight! IndentBlanklineSpaceCharBlankline cterm=nocombine gui=nocombine guifg=#373b41
 " highlight! IndentBlanklineContextChar cterm=nocombine ctermbg=110 gui=nocombine guibg=#81a2be
+" }}}
+
+" Plugin: nvim-cmp {{{
+" ---
+highlight! link CmpItemAbbrMatch Statement
+highlight! link CmpItemAbbrMatchFuzzy Statement
+
+highlight! link CmpItemKindVariable PreProc
+highlight! link CmpItemKindInterface PreProc
+highlight! link CmpItemKindText PreProc
+
+highlight! link CmpItemKindFunction Identifier
+highlight! link CmpItemKindMethod Identifier
+
+highlight! CmpItemKindKeyword guibg=NONE guifg=#D4D4D4
+highlight! CmpItemKindProperty guibg=NONE guifg=#D4D4D4
+highlight! CmpItemKindUnit guibg=NONE guifg=#D4D4D4
+highlight! CmpItemAbbrDeprecated guibg=NONE gui=strikethrough guifg=#808080
+
 " }}}
 
 " Plugin: Telescope {{{
@@ -194,9 +218,10 @@ highlight! link ShotFGraph SpellRare
 highlight! link ShotFBlank DiffAdd
 " }}}
 
-" Plugin: vim-signature {{{
-highlight! SignatureMarkText    ctermfg=11 guifg=#756207 ctermbg=234 guibg=#1c1c1c
-highlight! SignatureMarkerText  ctermfg=12 guifg=#4EA9D7 ctermbg=234 guibg=#1c1c1c
+" Plugin: chentau/marks.nvim {{{
+highlight! MarkSignHL ctermfg=12 guifg=#4EA9D7
+" highlight! default link MarkSignNumHL CursorLineNr
+" highlight! default link MarkVirtTextHL Comment
 " }}}
 
 " Plugin: vim-choosewin {{{
