@@ -441,12 +441,6 @@ local setup = function()
 		}
 	}
 
-<<<<<<< HEAD
-	-- Enable indent-guides in telescope preview
-
-
-=======
->>>>>>> 8ed6e3d529f2fe355f3a1a509bb6a7cb5ed19309
 	-- Telescope extensions are loaded in each plugin.
 end
 
