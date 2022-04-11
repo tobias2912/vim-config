@@ -1,4 +1,6 @@
 " highlight colorcolumn guibg=#303030 "messes up toggle wrap
+set autowrite
+set autowriteall
 let g:ale_fixers = {
 \   'javascript': ['prettier', 'eslint'],
 \   'typescript': ['prettier', 'eslint'],

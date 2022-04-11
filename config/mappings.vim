@@ -455,34 +455,34 @@ endfunction "}}}
 if dein#tap('telescope.nvim')
 	" General pickers
 	nnoremap <localleader>r <cmd>Telescope resume<CR>
-	nnoremap <localleader>R <cmd>Telescope pickers<CR>
+	" nnoremap <localleader>R <cmd>Telescope pickers<CR>
 	nnoremap <C-p> <cmd>Telescope find_files<CR>
 	nnoremap <C-f>  <cmd>Telescope live_grep<CR>
 	nnoremap <C-b> <cmd>Telescope buffers<CR>
-	nnoremap <localleader>h <cmd>Telescope highlights<CR>
+	" nnoremap <localleader>h <cmd>Telescope highlights<CR>
 	nnoremap <leader>p <cmd>Telescope commands<CR>
 	nnoremap <localleader>j <cmd>Telescope jumplist<CR>
 	nnoremap <localleader>m <cmd>Telescope marks<CR>
-	nnoremap <localleader>o <cmd>Telescope vim_options<CR>
+	" nnoremap <localleader>o <cmd>Telescope vim_options<CR>
 	nnoremap <localleader>t <cmd>Telescope lsp_dynamic_workspace_symbols<CR>
-	nnoremap <localleader>v <cmd>Telescope registers<CR>
+	" nnoremap <localleader>v <cmd>Telescope registers<CR>
 	nnoremap <leader>s <cmd>Telescope spell_suggest<CR>
 	nnoremap <localleader>s <cmd>Telescope session-lens search_session<CR>
 	nnoremap <localleader>x <cmd>Telescope oldfiles<CR>
-	nnoremap <localleader>z <cmd>lua require('plugins.telescope').pickers.zoxide()<CR>
-	nnoremap <localleader>; <cmd>Telescope command_history<CR>
-	nnoremap <localleader>/ <cmd>Telescope search_history<CR>
+	" nnoremap <localleader>z <cmd>lua require('plugins.telescope').pickers.zoxide()<CR>
+	" nnoremap <localleader>; <cmd>Telescope command_history<CR>
+	" nnoremap <localleader>/ <cmd>Telescope search_history<CR>
 
 	" Git
-	nnoremap <leader>gs <cmd>Telescope git_status<CR>
-	nnoremap <leader>gr <cmd>Telescope git_branches<CR>
+	nnoremap <leader>gS <cmd>Telescope git_status<CR>
+	nnoremap <leader>gb <cmd>Telescope git_branches<CR>
 	nnoremap <leader>gc <cmd>Telescope git_commits<CR>
-	nnoremap <leader>gC <cmd>Telescope git_bcommits<CR>
+	nnoremap <leader>gL <cmd>Telescope git_bcommits<CR>
 	nnoremap <leader>gh <cmd>Telescope git_stash<CR>
 
 	" Location-specific find files/directories
-	nnoremap <localleader>n <cmd>lua require('plugins.telescope').pickers.plugin_directories()<CR>
-	nnoremap <localleader>w <cmd>lua require('plugins.telescope').pickers.notebook()<CR>
+	" nnoremap <localleader>n <cmd>lua require('plugins.telescope').pickers.plugin_directories()<CR>
+	" nnoremap <localleader>w <cmd>lua require('plugins.telescope').pickers.notebook()<CR>
 
 	" Navigation
 	nnoremap <leader>/ <cmd>Telescope current_buffer_fuzzy_find<CR>
@@ -501,7 +501,7 @@ endif
 
 if dein#tap('fern.vim')
 	nnoremap <C-e> <cmd>Fern -toggle -drawer .<CR>
-	nnoremap <LocalLeader>a <cmd>Fern -reveal=% -drawer .<CR>
+	" nnoremap <LocalLeader>a <cmd>Fern -reveal=% -drawer .<CR>
 endif
 
 if dein#tap('symbols-outline.nvim')
@@ -514,7 +514,7 @@ if dein#tap('vim-vsnip')
 endif
 
 if dein#tap('nvim-gps')
-	nnoremap <Leader>f <cmd>lua print(require'nvim-gps'.get_location())<CR>
+	" nnoremap <Leader>f <cmd>lua print(require'nvim-gps'.get_location())<CR>
 endif
 
 if dein#tap('emmet-vim')
@@ -763,3 +763,8 @@ endif
 " }}}
 
 " vim: set foldmethod=marker ts=2 sw=2 tw=80 noet :
+" vim: set ts=2 sw=2 tw=80 noet :
+" vim: set ts=2 sw=2 tw=80 noet :
+" vim: set ts=2 sw=2 tw=80 noet :
+" vim: set ts=2 sw=2 tw=80 noet :
+" vim: set ts=2 sw=2 tw=80 noet :
